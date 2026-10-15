@@ -73,6 +73,36 @@ This updates:
 
 ## 4. How BE2 Connects to This (The Handoff)
 
+## 4.1 Run the BE2 API foundation
+
+The repository includes a synthetic, research-only FastAPI service with deterministic
+demo patients and a counterfactual sandbox. It loads the existing BE1 model artifact
+once at startup.
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Open `http://localhost:8000/docs` for the OpenAPI UI. The seeded pseudonymous demo
+IDs are `ramesh-k`, `sunita-d`, and `mohan-l`.
+
+```bash
+curl http://localhost:8000/api/v1/patients/sunita-d/forecast
+curl -X POST http://localhost:8000/api/v1/patients/sunita-d/simulate \
+  -H 'content-type: application/json' \
+  -d '{"fluid_volume_ml": 500, "nsaid_withheld": true}'
+```
+
+For containerized startup:
+
+```bash
+docker compose up --build
+```
+
+All demo data and output are synthetic. The physiology values are model-estimated,
+and the simulation is explicitly not a treatment recommendation.
+
 Backend 2 (BE2) builds the FastAPI routes, physiology engine, and counterfactual simulation sandbox. BE2 does **not** need to touch internal ML code under `ml/models/`.
 
 BE2 loads the pre-trained artifact using the contract in `00_SHARED_INTERFACES.md`:

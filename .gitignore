@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 venv/
+.venv/
 .env
 ml/data/raw/*
 !ml/data/raw/.gitkeep
